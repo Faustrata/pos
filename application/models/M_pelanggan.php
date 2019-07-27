@@ -35,12 +35,12 @@ class M_pelanggan extends CI_Model
 				, (SELECT @row := 0) r WHERE 1=1 
 				AND a.`dihapus` = 'tidak' 
 		";
-		
+
 		$data['totalData'] = $this->db->query($sql)->num_rows();
-		
+
 		if( ! empty($like_value))
 		{
-			$sql .= " AND ( ";    
+			$sql .= " AND ( ";
 			$sql .= "
 				a.`nama` LIKE '%".$this->db->escape_like_str($like_value)."%' 
 				OR a.`alamat` LIKE '%".$this->db->escape_like_str($like_value)."%' 
@@ -50,10 +50,10 @@ class M_pelanggan extends CI_Model
 			";
 			$sql .= " ) ";
 		}
-		
+
 		$data['totalFiltered']	= $this->db->query($sql)->num_rows();
-		
-		$columns_order_by = array( 
+
+		$columns_order_by = array(
 			0 => 'nomor',
 			1 => 'a.`nama`',
 			2 => 'a.`alamat`',
@@ -64,26 +64,28 @@ class M_pelanggan extends CI_Model
 
 		$sql .= " ORDER BY ".$columns_order_by[$column_order]." ".$column_dir.", nomor ";
 		$sql .= " LIMIT ".$limit_start." ,".$limit_length." ";
-		
+
 		$data['query'] = $this->db->query($sql);
 		return $data;
 	}
 
-	function tambah_pelanggan($nama, $alamat, $telepon, $info, $unique)
+	function tambah_pelanggan($nama, $alamat, $telepon, $info, $unique, $nomor_polisi, $merk_mobil)
 	{
 		date_default_timezone_set("Asia/Jakarta");
 
-		$dt = array(
+		$data = array(
 			'nama' => $nama,
 			'alamat' => $alamat,
 			'telp' => $telepon,
 			'info_tambahan' => $info,
 			'waktu_input' => date('Y-m-d H:i:s'),
 			'dihapus' => 'tidak',
-			'kode_unik' => $unique
+			'kode_unik' => $unique,
+            'nomor_polisi'=> $nomor_polisi,
+            'merk_mobil' => $merk_mobil
 		);
 
-		return $this->db->insert('pj_pelanggan', $dt);
+		return $this->db->insert('pj_pelanggan', $data);
 	}
 
 	function update_pelanggan($id_pelanggan, $nama, $alamat, $telepon, $info)

@@ -1,6 +1,14 @@
 <?php echo form_open('penjualan/tambah-pelanggan', array('id' => 'FormTambahPelanggan')); ?>
 <div class='form-group'>
-	<label>Nama</label>
+    <label>Nomor Polisi</label>
+    <input type='text' name='nomor_polisi' class='form-control'>
+</div>
+<div class='form-group'>
+    <label>Merk Mobil</label>
+    <input type='text' name='merk_mobil' class='form-control'>
+</div>
+<div class='form-group'>
+	<label>Nama Pelanggan</label>
 	<input type='text' name='nama' class='form-control'>
 </div>
 <div class='form-group'>
@@ -30,7 +38,7 @@ function TambahPelanggan()
 		dataType:'json',
 		success: function(json){
 			if(json.status == 1)
-			{ 
+			{
 				$('#FormTambahPelanggan').each(function(){
 					this.reset();
 				});
@@ -54,13 +62,13 @@ function TambahPelanggan()
 				else
 				{
 					$('#ResponseInput').html(json.pesan);
-					setTimeout(function(){ 
+					setTimeout(function(){
 				   		$('#ResponseInput').html('');
 				    }, 3000);
 					$('#my-grid').DataTable().ajax.reload( null, false );
 				}
 			}
-			else 
+			else
 			{
 				$('#ResponseInput').html(json.pesan);
 			}

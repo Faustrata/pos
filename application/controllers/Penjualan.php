@@ -499,7 +499,10 @@ class Penjualan extends MY_Controller
 		echo json_encode($json_data);
 	}
 
-	public function tambah_pelanggan()
+    /**
+     *
+     */
+    public function tambah_pelanggan()
 	{
 		$level = $this->session->userdata('ap_level');
 		if($level == 'admin' OR $level == 'kasir' OR $level == 'keuangan')
@@ -507,25 +510,29 @@ class Penjualan extends MY_Controller
 			if($_POST)
 			{
 				$this->load->library('form_validation');
+				$this->form_validation->set_rules('nomor_polisi','Nomor Polisi','trim|required|max_length[10]');
 				$this->form_validation->set_rules('nama','Nama','trim|required|alpha_spaces|max_length[40]');
 				$this->form_validation->set_rules('alamat','Alamat','trim|required|max_length[1000]');
 				$this->form_validation->set_rules('telepon','Telepon / Handphone','trim|required|numeric|max_length[40]');
 				$this->form_validation->set_rules('info','Info Tambahan Lainnya','trim|max_length[1000]');
+                $this->form_validation->set_rules('merk_mobil','Merk Mobil','trim|required|alpha_spaces|max_length[40]');
 
 				$this->form_validation->set_message('alpha_spaces','%s harus alphabet !');
 				$this->form_validation->set_message('numeric','%s harus angka !');
 				$this->form_validation->set_message('required','%s harus diisi !');
 
-				if($this->form_validation->run() == TRUE)
+				if($this->form_validation->run() === TRUE)
 				{
 					$this->load->model('m_pelanggan');
+                    $nomor_polisi = $this->input->post('nomor_polisi');
 					$nama 		= $this->input->post('nama');
 					$alamat 	= $this->clean_tag_input($this->input->post('alamat'));
 					$telepon 	= $this->input->post('telepon');
 					$info 		= $this->clean_tag_input($this->input->post('info'));
+					$merk_mobil	= $this->input->post('merk_mobil');
 
 					$unique		= time().$this->session->userdata('ap_id_user');
-					$insert 	= $this->m_pelanggan->tambah_pelanggan($nama, $alamat, $telepon, $info, $unique);
+					$insert 	= $this->m_pelanggan->tambah_pelanggan($nama, $alamat, $telepon, $info, $unique, $nomor_polisi, $merk_mobil);
 					if($insert)
 					{
 						$id_pelanggan = $this->m_pelanggan->get_dari_kode($unique)->row()->id_pelanggan;
