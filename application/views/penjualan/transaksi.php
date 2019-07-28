@@ -77,9 +77,26 @@ if($level !== 'admin')
 					<div class="panel panel-primary" id='PelangganArea'>
 						<div class="panel-heading"><i class='fa fa-user'></i> Informasi Pelanggan</div>
 						<div class="panel-body">
+
+                            <div class="form-group">
+                                <label>Nomor Polisi</label>
+                                <a href="<?php echo site_url('penjualan/tambah-pelanggan'); ?>" class='pull-right' id='TambahPelanggan'>Tambah Baru ?</a>
+                                <select name='nomor_polisi' id='nomor_polisi' class='form-control input-sm' style='cursor: pointer;'>
+                                    <option value=''>-- Umum --</option>
+                                    <?php
+                                    if($pelanggan->num_rows() > 0)
+                                    {
+                                        foreach($pelanggan->result() as $p)
+                                        {
+                                            echo "<option value='".$p->nomor_polisi."'>".$p->nomor_polisi."</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
 							<div class="form-group">
 								<label>Pelanggan</label>
-								<a href="<?php echo site_url('penjualan/tambah-pelanggan'); ?>" class='pull-right' id='TambahPelanggan'>Tambah Baru ?</a>
 								<select name='id_pelanggan' id='id_pelanggan' class='form-control input-sm' style='cursor: pointer;'>
 									<option value=''>-- Umum --</option>
 									<?php
@@ -147,7 +164,7 @@ if($level !== 'admin')
 					<div class='row'>
 						<div class='col-sm-7'>
 							<textarea name='catatan' id='catatan' class='form-control' rows='2' placeholder="Catatan Transaksi (Jika Ada)" style='resize: vertical; width:83%;'></textarea>
-							
+
 							<br />
 							<p><i class='fa fa-keyboard-o fa-fw'></i> <b>Shortcut Keyboard : </b></p>
 							<div class='row'>
@@ -155,7 +172,7 @@ if($level !== 'admin')
 								<div class='col-sm-6'>F9 = Cetak Struk</div>
 								<div class='col-sm-6'>F8 = Fokus ke field bayar</div>
 								<div class='col-sm-6'>F10 = Simpan Transaksi</div>
-							</div> 
+							</div>
 						</div>
 						<div class='col-sm-5'>
 							<div class="form-horizontal">
@@ -352,14 +369,14 @@ $(document).on('keyup', '#pencarian_kode', function(e){
 			{
 				$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)').find('div#hasil_pencarian li:first').addClass('autocomplete_active');
 			}
-		} 
+		}
 		else if(charCode == 38)
 		{
 			if($('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)').find('div#hasil_pencarian li.autocomplete_active').length > 0)
 			{
 				var Sebelumnya = $('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)').find('div#hasil_pencarian li.autocomplete_active').prev();
 				$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)').find('div#hasil_pencarian li.autocomplete_active').removeClass('autocomplete_active');
-			
+
 				Sebelumnya.addClass('autocomplete_active');
 			}
 			else
@@ -373,7 +390,7 @@ $(document).on('keyup', '#pencarian_kode', function(e){
 			var Kodenya = Field.find('div#hasil_pencarian li.autocomplete_active span#kodenya').html();
 			var Barangnya = Field.find('div#hasil_pencarian li.autocomplete_active span#barangnya').html();
 			var Harganya = Field.find('div#hasil_pencarian li.autocomplete_active span#harganya').html();
-			
+
 			Field.find('div#hasil_pencarian').hide();
 			Field.find('input').val(Kodenya);
 
@@ -383,7 +400,7 @@ $(document).on('keyup', '#pencarian_kode', function(e){
 			$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(5) input').removeAttr('disabled').val(1);
 			$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(6) input').val(Harganya);
 			$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(6) span').html(to_rupiah(Harganya));
-			
+
 			var IndexIni = $(this).parent().parent().index() + 1;
 			var TotalIndex = $('#TabelTransaksi tbody tr').length;
 			if(IndexIni == TotalIndex){
@@ -395,7 +412,7 @@ $(document).on('keyup', '#pencarian_kode', function(e){
 				$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(5) input').focus();
 			}
 		}
-		else 
+		else
 		{
 			AutoCompleteGue($(this).width(), $(this).val(), $(this).parent().parent().index());
 		}
@@ -410,7 +427,7 @@ $(document).on('keyup', '#pencarian_kode', function(e){
 
 $(document).on('click', '#daftar-autocomplete li', function(){
 	$(this).parent().parent().parent().find('input').val($(this).find('span#kodenya').html());
-	
+
 	var Indexnya = $(this).parent().parent().parent().parent().index();
 	var NamaBarang = $(this).find('span#barangnya').html();
 	var Harganya = $(this).find('span#harganya').html();
@@ -575,7 +592,7 @@ $(document).on('keydown', 'body', function(e){
 		$('#ModalFooter').html("<button type='button' class='btn btn-primary' id='SimpanTransaksi'>Ya, saya yakin</button><button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>");
 		$('#ModalGue').modal('show');
 
-		setTimeout(function(){ 
+		setTimeout(function(){
 	   		$('button#SimpanTransaksi').focus();
 	    }, 500);
 
@@ -591,7 +608,7 @@ $(document).on('click', '#Simpann', function(){
 	$('#ModalFooter').html("<button type='button' class='btn btn-primary' id='SimpanTransaksi'>Ya, saya yakin</button><button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>");
 	$('#ModalGue').modal('show');
 
-	setTimeout(function(){ 
+	setTimeout(function(){
    		$('button#SimpanTransaksi').focus();
     }, 500);
 });
@@ -627,7 +644,7 @@ function SimpanTransaksi()
 				alert(data.pesan);
 				window.location.href="<?php echo site_url('penjualan/transaksi'); ?>";
 			}
-			else 
+			else
 			{
 				$('.modal-dialog').removeClass('modal-lg');
 				$('.modal-dialog').addClass('modal-sm');
@@ -635,7 +652,7 @@ function SimpanTransaksi()
 				$('#ModalContent').html(data.pesan);
 				$('#ModalFooter').html("<button type='button' class='btn btn-primary' data-dismiss='modal' autofocus>Ok</button>");
 				$('#ModalGue').modal('show');
-			}	
+			}
 		}
 	});
 }

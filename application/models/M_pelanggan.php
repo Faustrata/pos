@@ -4,7 +4,7 @@ class M_pelanggan extends CI_Model
 	function get_all()
 	{
 		return $this->db
-			->select('id_pelanggan, nama, alamat, telp, info_tambahan')
+			->select('id_pelanggan, nama, alamat, telp, info_tambahan, nomor_polisi, merk_mobil')
 			->where('dihapus', 'tidak')
 			->order_by('nama','asc')
 			->get('pj_pelanggan');
